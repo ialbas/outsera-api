@@ -12,7 +12,6 @@ import logger from "../src/helpers/logger.js";
 import HttpResponse from "../src/helpers/http/http-response.js";
 import { cleanupFolderUploads } from "../src/helpers/utils.js";
 
-
 // Definindo __dirname para módulos ES6
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -23,48 +22,26 @@ before(() => {
   });
 });
 
-before(async () => {
-  try {
-    await sequelize.sync({ force: true });
+describe("Testes de Integração - Inicialização de Arquivo CSV", () => {
+  it("deve apresentar dois resultados min com intervalo igual a 1", async () => {
+    const response = await supertest(app)
+      .get("/api/producers/intervals")
+      .expect(200);
 
-    const movies = [
-      {
-        year: 1989,
-        title: "some_title",
-        studios: "some_studio",
-        producers: "some_producer",
-        winner: "yes",
-      },
-      {
-        year: 1990,
-        title: "some_title",
-        studios: "some_studio",
-        producers: "some_producer, some_producer_1",
-        winner: "yes",
-      },
-      {
-        year: 2007,
-        title: "some_title",
-        studios: "some_studio",
-        producers: "some_producer, some_producer_1",
-        winner: "yes",
-      },
-      {
-        year: 2005,
-        title: "some_title",
-        studios: "some_studio",
-        producers: "some_producer_2, some_producer_1",
-        winner: "yes",
-      },
-    ];
+    assert.equal(response.body.data.min[0].interval, 1);
+    assert.equal(response.body.data.min[1].interval, 1);
+  });
+  it("deve apresentar dois resultados max com intervalo igual a 22", async () => {
+    const response = await supertest(app)
+      .get("/api/producers/intervals")
+      .expect(200);
 
-    await Movie.bulkCreate(movies, { validate: true });
-  } catch (error) {
-    console.error("Erro ao configurar o banco de dados para os testes:", error);
-  }
+    assert.equal(response.body.data.max[0].interval, 22);
+    assert.equal(response.body.data.max[1].interval, 22);
+  });
 });
 
-describe("Testes de Integração", () => {
+describe("Testes de Integração - Upload de Arquivo", () => {
   it("deve fazer o upload de um arquivo CSV com sucesso", async () => {
     const filePath = path.resolve(
       __dirname,
@@ -79,6 +56,7 @@ describe("Testes de Integração", () => {
 
     assert.strictEqual(response.body.statusCode, 200);
   });
+
   it("deve retornar produtor(es) que tiveram o menor intervalo de tempo (em anos) entre suas vitórias consecutivas - min", async () => {
     const response = await supertest(app)
       .get("/api/producers/intervals")
@@ -244,5 +222,5 @@ after(() => {
 
 after(async () => {
   await sequelize.drop();
-  cleanupFolderUploads()
+  cleanupFolderUploads();
 });

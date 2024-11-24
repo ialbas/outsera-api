@@ -19,7 +19,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: "https://outsera.ialbasjunior.com.br", // URL base da API
+        url: "http://localhost:3000", // URL base da API
         description: "Web server",
       },
     ],
@@ -111,7 +111,6 @@ const swaggerOptions = {
         },
       },
     },
-    
   },
   apis: ["./src/routes/movies.js", "./src/controllers/moviesController.js"], // Inclui rotas e controladores para documentação
 };

@@ -5,6 +5,8 @@ import { initializeDatabase } from "./config/database.js";
 import logger from "./helpers/logger.js";
 import routes from "./routes/index.js";
 
+import loadFileData from "./config/loadFileData.js"
+
 const app = express();
 
 // Configuração do CORS
@@ -32,13 +34,19 @@ const startServer = () => {
     });
   } else {
     app.listen(PORT_TEST, () => {
-      logger.info(`Servidor rodando na porta ${PORT_TEST}`);
+      logger.info(`Servidor de teste rodando na porta ${PORT_TEST}`);
     });
   }
 };
 
 // Inicialização da aplicação
 initializeDatabase();
+
+// Carrega os dados do arquivo movielist
+(async () => {
+  await loadFileData();
+})();
+
 startServer();
 
 export default app; // Exporta o app para uso em testes (ex: Supertest)

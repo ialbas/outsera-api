@@ -16,7 +16,7 @@ const validateHeaders = (headers) => {
   const isValid = expectedColumns.every((col) => headers.includes(col));
   if (!isValid) {
     logger.error(
-      "Os nomes das colunas no arquivo CSV estão incorretos ou incompletos." 
+      "Os nomes das colunas no arquivo CSV estão incorretos ou incompletos."
     );
   }
   return isValid;
@@ -32,7 +32,7 @@ const validateRow = (row, currentYear) => {
   const year = parseInt(row.year, 10);
   return (
     year >= 1900 &&
-    year <= currentYear &&
+    year <= 2100 &&
     sanitizeInput(row.title) &&
     sanitizeInput(row.studios) &&
     sanitizeInput(row.producers)
@@ -90,7 +90,7 @@ const execLoadCsvData = async (filePath, onComplete) => {
       .on("headers", (headers) => {
         if (!validateHeaders(headers)) {
           stream.destroy();
-          onComplete(false)
+          onComplete(false);
         } else {
           logger.info("Validação das colunas do CSV concluída com sucesso.");
         }
@@ -160,22 +160,26 @@ const execLoadCsvData = async (filePath, onComplete) => {
 /**
  * Carrega os dados de um arquivo CSV no banco de dados.
  * @param {String} filePath - Caminho do arquivo CSV.
+ * @param {Boolean} maintain - Opão para manter o remover o arquivo apos o processamento.
  * @returns {Promise<Object>} Retorna uma promessa que resolve com o resultado da operação.
  */
-async function loadCsvData(filePath) {
+async function loadCsvData(filePath, maintain) {
   return new Promise((resolve, reject) => {
     // Função callback que é chamada quando o carregamento é concluído
     const handleCompletion = (result) => {
       if (result.error) {
-        logger.error(
-          `Erro ao carregar o CSV no banco de dados: ${result.error}`
-        );
-        cleanupFile(filePath);
-        return reject(result.error);
+        logger.error(`Erro ao carregar o CSV no banco de dados: ${result.error}`);
+        if (!maintain) {
+          cleanupFile(filePath);
+        }
+        reject(result.error);
+      } else {
+        logger.info("Dados carregados com sucesso no banco de dados.");
+        if (!maintain) {
+          cleanupFile(filePath);
+        }
+        resolve(result);
       }
-      logger.info("Dados carregados com sucesso no banco de dados.");
-      cleanupFile(filePath);
-      return resolve(result);
     };
 
     // Executa o carregamento dos dados CSV
