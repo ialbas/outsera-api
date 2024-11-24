@@ -7,7 +7,7 @@ const swaggerOptions = {
       title: "Golden Raspberry API - API Documentation",
       version: "1.0.0",
       description:
-        "Esta API é utilizada para processar e expor dados sobre vencedores do prêmio 'Golden Raspberry', conhecido por premiar os piores filmes de cada ano. O objetivo principal é fornecer informações sobre os produtores que têm os menores e maiores intervalos entre vitórias consecutivas. <br><br><b>IMPORTANTE:</b> É necessário fazer o <b>Upload</b> antes de buscar os <b>Intervalos</b> dos prêmios.",
+        "Esta API é utilizada para processar e expor dados sobre vencedores do prêmio 'Golden Raspberry', conhecido por premiar os piores filmes de cada ano. O objetivo principal é fornecer informações sobre os produtores que têm os menores e maiores intervalos entre vitórias consecutivas. <br><br><b>IMPORTANTE:</b> Não é necessário fazer o <b>Upload</b> antes de buscar os <b>Intervalos</b> dos prêmios, pois os dados são são carregados autimaticamente.",
       contact: {
         name: "Repositório do GitHub",
         url: "https://github.com/ialbas/outsera-api",
