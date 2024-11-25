@@ -1,0 +1,31 @@
+{
+  "name": "golden-raspberry-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node ./src/app.js",
+    "dev": "nodemon ./src/app.js",
+    "test": "cross-env NODE_ENV=test mocha --timeout 5000"
+  },
+  "dependencies": {
+    "chai": "^5.1.2",
+    "cors": "^2.8.5",
+    "csv-parser": "^3.0.0",
+    "express": "^4.21.1",
+    "multer": "^1.4.5-lts.1",
+    "node-cache": "^5.1.2",
+    "nodemon": "^3.1.7",
+    "sequelize": "^6.37.5",
+    "sqlite3": "^5.1.7",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "mocha": "^10.8.2",
+    "supertest": "^7.0.0"
+  }
+}

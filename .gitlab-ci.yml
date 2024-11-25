@@ -1,0 +1,26 @@
+variables:
+  CI_REGISTRY_IMAGE: "registry.sistemaglobal.com.br/ialbas/api-outsera:v1"
+  CD_RANCHER_NAMESPACE: "ialbas-ns"
+  CD_RANCHER_WORKLOAD: "api-outsera"
+
+stages:
+  - build
+  - push
+build:
+  stage: build
+  script:
+    # Make build of the image
+    - docker build -t $CI_REGISTRY_IMAGE .
+
+push_deploy:
+  stage: push
+  script:
+    # Send the image to registry
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" "$CI_REGISTRY" --password-stdin
+    - docker push $CI_REGISTRY_IMAGE
+    # Add Rancher Redeploy
+    - >-
+      # curl -u "$RANCHER_ACCESS_KEY:$RANCHER_SECRET_KEY"
+      # -X POST
+      # -H "Accept: application/json"
+      # -H "Content-Type: application/json" "https://rancher.sistemaglobal.com.br/v3/project/$RANCHER_CLUSTER_ID:$RANCHER_PROJECT_ID/workloads/deployment:$CD_RANCHER_NAMESPACE:$CD_RANCHER_WORKLOAD?action=redeploy"
